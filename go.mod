@@ -95,3 +95,6 @@ replace github.com/thanos-io/thanos v0.22.0 => github.com/thanos-io/thanos v0.19
 
 // Replace memberlist with Grafana's fork which includes some fixes that haven't been merged upstream yet
 replace github.com/hashicorp/memberlist => github.com/grafana/memberlist v0.2.5-0.20211201083710-c7bc8e9df94b
+
+// Pin prometheus against Airbnb fork to include xrate and friends
+replace github.com/prometheus/prometheus => github.com/aallawala/prometheus v1.8.2-0.20220415023825-2d888f116058
