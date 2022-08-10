@@ -22,9 +22,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
-	"strconv"
 	"strings"
-	"time"
 
 	gc "github.com/vimeo/galaxycache"
 
@@ -33,9 +31,6 @@ import (
 )
 
 const defaultBasePath = "/_galaxycache/"
-
-// When the retrieved value should expire. Unix timestamp in milliseconds.
-const ttlHeader = "X-Galaxycache-Expire"
 
 // HTTPFetchProtocol specifies HTTP specific options for HTTP-based
 // peer communication
@@ -186,13 +181,7 @@ func (h *HTTPHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.Header().Set("Content-Type", "application/octet-stream")
-	b, expTm, err := value.MarshalBinary()
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	w.Header().Set(ttlHeader, fmt.Sprintf("%d", expTm.UnixMilli()))
-	w.Write(b)
+	w.Write(value)
 }
 
 type httpFetcher struct {
@@ -201,7 +190,7 @@ type httpFetcher struct {
 }
 
 // Fetch here implements the RemoteFetcher interface for sending a GET request over HTTP to a peer
-func (h *httpFetcher) Fetch(ctx context.Context, galaxy string, key string) ([]byte, time.Time, error) {
+func (h *httpFetcher) Fetch(ctx context.Context, galaxy string, key string) ([]byte, error) {
 	u := fmt.Sprintf(
 		"%v%v/%v",
 		h.baseURL,
@@ -210,30 +199,21 @@ func (h *httpFetcher) Fetch(ctx context.Context, galaxy string, key string) ([]b
 	)
 	req, err := http.NewRequest("GET", u, nil)
 	if err != nil {
-		return nil, time.Time{}, err
+		return nil, err
 	}
 	res, err := h.transport.RoundTrip(req.WithContext(ctx))
 	if err != nil {
-		return nil, time.Time{}, err
+		return nil, err
 	}
 	defer res.Body.Close()
 	if res.StatusCode != http.StatusOK {
-		return nil, time.Time{}, fmt.Errorf("server returned HTTP response status code: %v", res.Status)
+		return nil, fmt.Errorf("server returned HTTP response status code: %v", res.Status)
 	}
 	data, err := ioutil.ReadAll(res.Body)
 	if err != nil {
-		return nil, time.Time{}, fmt.Errorf("reading response body: %v", err)
+		return nil, fmt.Errorf("reading response body: %v", err)
 	}
-
-	expireStr := res.Header[ttlHeader]
-	if len(expireStr) == 0 {
-		return nil, time.Time{}, fmt.Errorf("failed reading TTL header %s", ttlHeader)
-	}
-	expire, err := strconv.ParseInt(expireStr[0], 10, 64)
-	if err != nil {
-		return nil, time.Time{}, fmt.Errorf("parsing TTL header %s: %w", ttlHeader, err)
-	}
-	return data, time.UnixMilli(expire), nil
+	return data, nil
 }
 
 // Close here implements the RemoteFetcher interface for closing (does nothing for HTTP)
