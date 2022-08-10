@@ -91,4 +91,4 @@ replace github.com/bradfitz/gomemcache => github.com/themihai/gomemcache v0.0.0-
 replace github.com/hashicorp/memberlist => github.com/grafana/memberlist v0.2.5-0.20211201083710-c7bc8e9df94b
 
 // Pin prometheus against Airbnb fork to include xrate and friends
-replace github.com/prometheus/prometheus => github.com/aallawala/prometheus v1.8.2-0.20220415023825-2d888f116058
+replace github.com/prometheus/prometheus => github.com/airbnb/prometheus v1.8.2-0.20220810214424-97718fceab96
