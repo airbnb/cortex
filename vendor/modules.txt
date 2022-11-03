@@ -675,7 +675,7 @@ github.com/prometheus/exporter-toolkit/web
 github.com/prometheus/procfs
 github.com/prometheus/procfs/internal/fs
 github.com/prometheus/procfs/internal/util
-# github.com/prometheus/prometheus v0.39.1
+# github.com/prometheus/prometheus v0.39.1 => github.com/airbnb/prometheus v1.8.2-0.20221103181940-8030e07e1149
 ## explicit; go 1.18
 github.com/prometheus/prometheus/config
 github.com/prometheus/prometheus/discovery
@@ -1262,3 +1262,4 @@ sigs.k8s.io/yaml
 # github.com/go-openapi/spec => github.com/go-openapi/spec v0.20.6
 # github.com/ionos-cloud/sdk-go/v6 => github.com/ionos-cloud/sdk-go/v6 v6.0.4
 # github.com/googleapis/gnostic => github.com/google/gnostic v0.6.9
+# github.com/prometheus/prometheus => github.com/airbnb/prometheus v1.8.2-0.20221103181940-8030e07e1149

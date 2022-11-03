@@ -239,3 +239,6 @@ replace github.com/go-openapi/spec => github.com/go-openapi/spec v0.20.6
 replace github.com/ionos-cloud/sdk-go/v6 => github.com/ionos-cloud/sdk-go/v6 v6.0.4
 
 replace github.com/googleapis/gnostic => github.com/google/gnostic v0.6.9
+
+// Pin prometheus against Airbnb fork to include xrate and friends
+replace github.com/prometheus/prometheus => github.com/airbnb/prometheus v1.8.2-0.20221103181940-8030e07e1149
